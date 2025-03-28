@@ -15,7 +15,6 @@ def build():
         '--name=Excel密碼破解工具',  # 執行檔名稱
         '--windowed',  # 使用 GUI 模式
         '--onefile',  # 打包成單一檔案
-        '--icon=icon.ico',  # 程式圖示（如果有）
         '--add-data=README.md;.',  # 加入說明文件
         '--clean',  # 清理暫存檔
         '--noconfirm',  # 不詢問確認

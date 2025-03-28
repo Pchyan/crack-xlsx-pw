@@ -2,8 +2,14 @@ import itertools
 import string
 from tqdm import tqdm
 import argparse
+import os
 
 def generate_password_dict(min_length=4, max_length=16, output_file='password_dict.txt'):
+    # 確保輸出目錄存在
+    output_dir = os.path.dirname(output_file)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    
     # 定義字符集
     lowercase = string.ascii_lowercase
     uppercase = string.ascii_uppercase
@@ -20,18 +26,22 @@ def generate_password_dict(min_length=4, max_length=16, output_file='password_di
     total_passwords = sum(len(all_chars) ** length for length in range(min_length, max_length + 1))
     print(f"預計生成密碼數量：{total_passwords:,}")
     
-    # 生成密碼並寫入文件
-    with open(output_file, 'w', encoding='utf-8') as file:
-        for length in range(min_length, max_length + 1):
-            print(f"\n生成長度為 {length} 的密碼...")
-            for password_tuple in tqdm(itertools.product(all_chars, repeat=length), 
-                                     total=len(all_chars) ** length,
-                                     desc=f"長度 {length}"):
-                password = ''.join(password_tuple)
-                file.write(password + '\n')
-    
-    print(f"\n密碼字典已生成完成！")
-    print(f"檔案位置：{output_file}")
+    try:
+        # 生成密碼並寫入文件
+        with open(output_file, 'w', encoding='utf-8') as file:
+            for length in range(min_length, max_length + 1):
+                print(f"\n生成長度為 {length} 的密碼...")
+                for password_tuple in tqdm(itertools.product(all_chars, repeat=length), 
+                                         total=len(all_chars) ** length,
+                                         desc=f"長度 {length}"):
+                    password = ''.join(password_tuple)
+                    file.write(password + '\n')
+        
+        print(f"\n密碼字典已生成完成！")
+        print(f"檔案位置：{output_file}")
+    except Exception as e:
+        print(f"生成密碼字典時發生錯誤：{str(e)}")
+        raise
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='生成密碼字典工具')
